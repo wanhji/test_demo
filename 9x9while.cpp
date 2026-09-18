@@ -7,6 +7,10 @@ int main() {
     while(a<=9){
         int b=1;
         while(b<=a){
+            if(a*b<10){
+                cout<<b<<"x"<<a<<"="<<a*b<<"  ";
+            }
+            else
             cout<<b<<"x"<<a<<"="<<b*a<<" ";
             b++;
 
