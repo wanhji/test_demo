@@ -19,51 +19,47 @@ int main() {
     cv::Mat green_mask;
     cv::inRange(hsv, lower_green, upper_green, green_mask);
 
-    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(4, 4));
+    cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
+    for (int i = 0; i < 10; i++) {
+        cv::erode(green_mask, green_mask, kernel);
+    }    
+    for (int i = 0; i < 10; i++) {    
+        cv::dilate(green_mask, green_mask, kernel);   
+        cv::medianBlur(green_mask, green_mask,5);
+    }
     cv::morphologyEx(green_mask, green_mask, cv::MORPH_CLOSE, kernel);
+    cv::morphologyEx(green_mask, green_mask, cv::MORPH_OPEN, kernel);
+    
 
-    std::vector<std::vector<cv::Point>> contours;
-    cv::findContours(green_mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-
+    
+    cv::Mat result_img = src.clone();
+    std::vector<cv::Vec3f> circles;
+    cv::HoughCircles(green_mask, circles, cv::HOUGH_GRADIENT, 
+                     1,      
+                     15,    
+                     100,    
+                     12,    
+                     19,     
+                     38      
+                     );
     int count = 0;
+    for (size_t i = 0; i < circles.size(); i++) {
+        cv::Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
+        int radius = cvRound(circles[i][2]);
+        
+        
+        cv::circle(result_img, center, radius, cv::Scalar(0, 0, 255), 2);
+        count++;
+    }
     
-   for(int i = 0; i < contours.size(); i++)
-{
-    auto &cnt = contours[i];
-    double area = contourArea(cnt);
-    if(area < 80 || area > 3000)
-    continue;
-    cv::Rect rect = cv::boundingRect(cnt);
-    float aspect_ratio = (float)rect.width / rect.height;
-    double perimeter = arcLength(cnt, true);
-    double circularity = 4 * CV_PI * area / (perimeter * perimeter);
-    if(circularity < 0.7)
-    continue;
-    
-
-    cv::drawContours(src, contours, i, cv::Scalar(255, 0, 0), 2);
-    cv::Point center = (rect.tl() + rect.br()) / 2;
-    count++;
-    cv::putText(src, std::to_string(count), center, cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 1);
-    
-}
-    
-
-    
-    
-    std::cout << "检测到的子弹数量: " <<count << std::endl;
-    cv::namedWindow("原图",   cv::WINDOW_NORMAL);
-    cv::namedWindow("HSV图", cv::WINDOW_NORMAL);
-    cv::namedWindow("Green Mask", cv::WINDOW_NORMAL);
-    cv::namedWindow("Result", cv::WINDOW_NORMAL);
-
+    std::cout << "霍夫圆检测数量: " << count << std::endl;
+    cv::namedWindow("原图", cv::WINDOW_NORMAL);
+    cv::namedWindow("绿色掩码", cv::WINDOW_NORMAL);
+    cv::namedWindow("检测结果", cv::WINDOW_NORMAL);
     cv::imshow("原图", src);
-    cv::imshow("HSV图", hsv);
-    cv::imshow("Green Mask", green_mask);
-    cv::imshow("Result", src);
+    cv::imshow("绿色掩码", green_mask);
+    cv::imshow("检测结果", result_img);
 
     cv::waitKey(0);
-
-    cv::destroyAllWindows();
     return 0;
 }
