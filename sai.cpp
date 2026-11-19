@@ -40,10 +40,10 @@ int main()
     std::vector<cv::Vec3f> circles;
     cv::HoughCircles(green_mask, circles, cv::HOUGH_GRADIENT, 
                      1,      
-                     15,    
+                     37,    
                      100,    
-                     13,    
-                     16,     
+                     12,    
+                     15,     
                      42      
                      );
     int count = 0;
