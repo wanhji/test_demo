@@ -15,18 +15,18 @@ int main()
     cv::Mat hsv;
     cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
 
-    cv::Scalar lower_green = cv::Scalar(35, 43, 50);
+    cv::Scalar lower_green = cv::Scalar(35, 43, 120);
     cv::Scalar upper_green = cv::Scalar(85, 255, 255);
 
     cv::Mat green_mask;
     cv::inRange(hsv, lower_green, upper_green, green_mask);
 
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-    for (int i = 0; i < 10; i++) 
+    for (int i = 0; i < 6; i++) 
     {
         cv::erode(green_mask, green_mask, kernel);
     }    
-    for (int i = 0; i < 10; i++) 
+    for (int i = 0; i < 5; i++) 
     {    
         cv::dilate(green_mask, green_mask, kernel);   
         cv::medianBlur(green_mask, green_mask,5);
@@ -42,9 +42,9 @@ int main()
                      1,      
                      15,    
                      100,    
-                     12,    
-                     19,     
-                     38      
+                     13,    
+                     16,     
+                     42      
                      );
     int count = 0;
     for (size_t i = 0; i < circles.size(); i++) 
