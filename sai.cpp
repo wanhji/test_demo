@@ -1,10 +1,12 @@
 #include <opencv2/opencv.hpp>
 #include <iostream>
 
-int main() {
+int main() 
+{
     cv::Mat src = cv::imread("2.png", cv::IMREAD_COLOR);
 
-    if (src.empty()) {
+    if (src.empty()) 
+    {
         std::cerr << "无法加载图片" << std::endl;
         return -1;
     }
@@ -20,10 +22,12 @@ int main() {
     cv::inRange(hsv, lower_green, upper_green, green_mask);
 
     cv::Mat kernel = cv::getStructuringElement(cv::MORPH_ELLIPSE, cv::Size(3, 3));
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) 
+    {
         cv::erode(green_mask, green_mask, kernel);
     }    
-    for (int i = 0; i < 10; i++) {    
+    for (int i = 0; i < 10; i++) 
+    {    
         cv::dilate(green_mask, green_mask, kernel);   
         cv::medianBlur(green_mask, green_mask,5);
     }
@@ -43,7 +47,8 @@ int main() {
                      38      
                      );
     int count = 0;
-    for (size_t i = 0; i < circles.size(); i++) {
+    for (size_t i = 0; i < circles.size(); i++) 
+    {
         cv::Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
         int radius = cvRound(circles[i][2]);
         
@@ -51,7 +56,9 @@ int main() {
         cv::circle(result_img, center, radius, cv::Scalar(0, 0, 255), 2);
         count++;
     }
-    
+    std::string show_text = "number:" + std::to_string(count);
+    cv::Point text_pos(result_img.cols - 150, 50);
+    cv::putText(result_img, show_text, text_pos, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0, 0, 255), 2);
     std::cout << "霍夫圆检测数量: " << count << std::endl;
     cv::namedWindow("原图", cv::WINDOW_NORMAL);
     cv::namedWindow("绿色掩码", cv::WINDOW_NORMAL);
