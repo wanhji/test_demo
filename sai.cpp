@@ -33,6 +33,23 @@ int main()
     }
     cv::morphologyEx(green_mask, green_mask, cv::MORPH_CLOSE, kernel);
     cv::morphologyEx(green_mask, green_mask, cv::MORPH_OPEN, kernel);
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+    findContours(green_mask, contours, hierarchy, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
+
+    
+    cv::Mat clean_mask = cv::Mat::zeros(green_mask.size(), CV_8UC1);
+
+    for (size_t i = 0; i < contours.size(); i++)
+    {   
+        double area = cv::contourArea(contours[i]);
+        if (area >600 && area < 40000) 
+       {
+        drawContours(clean_mask, contours, i, cv::Scalar(255), -1);
+       }
+
+    } 
+    
     
 
     
