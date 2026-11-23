@@ -15,8 +15,8 @@ int main()
     cv::Mat hsv;
     cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
 
-    cv::Scalar lower_green = cv::Scalar(35, 43, 120);
-    cv::Scalar upper_green = cv::Scalar(85, 255, 255);
+    cv::Scalar lower_green = cv::Scalar(33, 40, 90);
+    cv::Scalar upper_green = cv::Scalar(70, 255, 255);
 
     cv::Mat green_mask;
     cv::inRange(hsv, lower_green, upper_green, green_mask);
@@ -40,11 +40,11 @@ int main()
     std::vector<cv::Vec3f> circles;
     cv::HoughCircles(green_mask, circles, cv::HOUGH_GRADIENT, 
                      1,      
-                     37,    
+                     20,    
                      100,    
-                     12,    
+                     11,    
                      15,     
-                     42      
+                     45      
                      );
     int count = 0;
     for (size_t i = 0; i < circles.size(); i++) 
