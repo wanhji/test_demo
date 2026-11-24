@@ -14,14 +14,13 @@ int main()
         std::cerr << "无法加载图片" << std::endl;
         continue;;
     }
+    cv::Mat hsv ,green_mask,blur;
     //2 将图像从BGR颜色空间转换为HSV颜色空间
-    cv::Mat hsv;
     cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
     //3 定义绿色的HSV范围
     cv::Scalar sin_green = cv::Scalar(33, 40, 75);
     cv::Scalar max_green = cv::Scalar(70, 220, 210);
     //4 创建掩码，提取绿色区域
-    cv::Mat green_mask;
     cv::inRange(hsv, sin_green, max_green, green_mask);
     ////////////////////////////////////////
     ////////————————形态学优化————————////////
@@ -44,7 +43,6 @@ int main()
     //5 闭运算（填充小球内部孔洞）
     cv::morphologyEx(green_mask, green_mask, cv::MORPH_CLOSE, kernel);
     //6 高斯滤波
-    cv::Mat blur;
     cv::GaussianBlur(green_mask, blur, cv::Size(9, 9), 0);
     ///////////////////////////////////////////
     ///////——————面积过滤，霍夫圆检测——————///////
