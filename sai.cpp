@@ -15,8 +15,8 @@ int main()
     cv::Mat hsv;
     cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
 
-    cv::Scalar lower_green = cv::Scalar(33, 40, 90);
-    cv::Scalar upper_green = cv::Scalar(70, 255, 255);
+    cv::Scalar lower_green = cv::Scalar(33, 40, 75);
+    cv::Scalar upper_green = cv::Scalar(70, 220, 255);
 
     cv::Mat green_mask;
     cv::inRange(hsv, lower_green, upper_green, green_mask);
@@ -78,10 +78,10 @@ int main()
     cv::putText(result_img, show_text, text_pos, cv::FONT_HERSHEY_SIMPLEX, 0.6, cv::Scalar(0, 0, 255), 2);
     std::cout << "霍夫圆检测数量: " << count << std::endl;
     cv::namedWindow("原图", cv::WINDOW_NORMAL);
-    cv::namedWindow("绿色掩码", cv::WINDOW_NORMAL);
+    
     cv::namedWindow("检测结果", cv::WINDOW_NORMAL);
     cv::imshow("原图", src);
-    cv::imshow("绿色掩码", green_mask);
+   
     cv::imshow("检测结果", result_img);
 
     cv::waitKey(0);
