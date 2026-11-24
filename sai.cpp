@@ -3,14 +3,19 @@
 
 int main() 
 {
-    cv::Mat src = cv::imread("2.png", cv::IMREAD_COLOR);
+    std::vector<std::string> image_a ={"yuantu/1.png","yuantu/2.png","yuantu/3.png","yuantu/4.png","yuantu/5.png",};
+    for(int x = 1 ; x <= 5; x++)
+    {
+        std::string abc=image_a[x-1];
+
+    
+    cv::Mat src = cv::imread(abc, cv::IMREAD_COLOR);
 
     if (src.empty()) 
     {
         std::cerr << "无法加载图片" << std::endl;
-        return -1;
+        continue;;
     }
-    
 
     cv::Mat hsv;
     cv::cvtColor(src, hsv, cv::COLOR_BGR2HSV);
@@ -85,5 +90,7 @@ int main()
     cv::imshow("检测结果", result_img);
 
     cv::waitKey(0);
+    cv::destroyAllWindows();    
+}     
     return 0;
 }
